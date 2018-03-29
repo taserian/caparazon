@@ -1,0 +1,10 @@
+C:\Users\arodriguez\Documents\Projects\cu-final\ContosoUniversity.Db\bin\Debug\ContosoUniversity.Db_Package.sql
+C:\Users\arodriguez\Documents\Projects\cu-final\ContosoUniversity.Db\bin\Debug\ContosoUniversity.Db_DeployPackage.ps1
+C:\Users\arodriguez\Documents\Projects\cu-final\ContosoUniversity.Db\bin\Debug\
+C:\Users\arodriguez\Documents\Projects\cu-final\ContosoUniversity.Db\bin\Debug\ContosoUniversity.Db.sql
+C:\Users\arodriguez\Documents\Projects\cu-final\ContosoUniversity.Db\bin\Debug\ContosoUniversity.Db.dll
+C:\Users\arodriguez\Documents\Projects\cu-final\ContosoUniversity.Db\bin\Debug\ContosoUniversity.Db.pdb
+C:\Users\arodriguez\Documents\Projects\cu-final\ContosoUniversity.Db\obj\Debug\ContosoUniversity.Db_Package.sql
+C:\Users\arodriguez\Documents\Projects\cu-final\ContosoUniversity.Db\obj\Debug\ContosoUniversity.Db.sql
+C:\Users\arodriguez\Documents\Projects\cu-final\ContosoUniversity.Db\obj\Debug\ContosoUniversity.Db.dll
+C:\Users\arodriguez\Documents\Projects\cu-final\ContosoUniversity.Db\obj\Debug\ContosoUniversity.Db.pdb

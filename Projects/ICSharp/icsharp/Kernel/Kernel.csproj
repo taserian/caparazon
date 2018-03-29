@@ -1,0 +1,142 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{A785BBFB-CD6C-48B7-8BEA-DC241ACB6D70}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>iCSharp.Kernel</RootNamespace>
+    <AssemblyName>iCSharp.Kernel</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="Common.Logging">
+      <HintPath>..\packages\Common.Logging.2.1.2\lib\net40\Common.Logging.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\packages\Newtonsoft.Json.6.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="AsyncIO">
+      <HintPath>..\packages\AsyncIO.0.1.26.0\lib\net40\AsyncIO.dll</HintPath>
+    </Reference>
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="NetMQ">
+      <HintPath>..\packages\NetMQ.4.0.0.1\lib\net40\NetMQ.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Constants.cs" />
+    <Compile Include="Control\Control.cs" />
+    <Compile Include="Heartbeat\Heartbeat.cs" />
+    <Compile Include="IServer.cs" />
+    <Compile Include="KernelCreator.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ReplEngineFactory.cs" />
+    <Compile Include="ScriptEngine\ExecutionResult.cs" />
+    <Compile Include="ScriptEngine\IReplEngine.cs" />
+    <Compile Include="ScriptEngine\MemoryBufferConsole.cs" />
+    <Compile Include="ScriptEngine\ReplEngineWrapper.cs" />
+    <Compile Include="Shell\CompleteRequestHandler.cs" />
+    <Compile Include="Shell\ExecuteRequestHandler.cs" />
+    <Compile Include="Shell\IShellMessageHandler.cs" />
+    <Compile Include="Shell\KernelInfoRequestHandler.cs" />
+    <Compile Include="Shell\Shell.cs" />
+    <Compile Include="Stdin\Stdin.cs" />
+    <Compile Include="Helpers\MessageBuilder.cs" />
+    <Compile Include="Helpers\MessageSender.cs" />
+    <Compile Include="Helpers\ISignatureValidator.cs" />
+    <Compile Include="Helpers\IMessageSender.cs" />
+    <Compile Include="Helpers\SignatureValidator.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Common\Common.csproj">
+      <Project>{0330B333-D8B9-451E-B3B7-20DAF7A2FCD4}</Project>
+      <Name>Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Engine\src\ScriptCs.Contracts\ScriptCs.Contracts.csproj">
+      <Project>{6049E205-8B5F-4080-B023-70600E51FD64}</Project>
+      <Name>ScriptCs.Contracts</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Engine\src\ScriptCs.Core\ScriptCs.Core.csproj">
+      <Project>{E590E710-E159-48E6-A3E6-1A83D3FE732C}</Project>
+      <Name>ScriptCs.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Engine\src\ScriptCs.Engine.Mono\ScriptCs.Engine.Mono.csproj">
+      <Project>{E4ADCFEE-FF3B-4EF5-8298-2B31F407F58B}</Project>
+      <Name>ScriptCs.Engine.Mono</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Engine\src\ScriptCs.Engine.Roslyn\ScriptCs.Engine.Roslyn.csproj">
+      <Project>{E79EC231-E27D-4057-91C9-2D001A3A8C3B}</Project>
+      <Name>ScriptCs.Engine.Roslyn</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Engine\src\ScriptCs.Hosting\ScriptCs.Hosting.csproj">
+      <Project>{9AEF2D95-87FB-4829-B384-34BFE076D531}</Project>
+      <Name>ScriptCs.Hosting</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Engine\src\ScriptCs\ScriptCs.csproj">
+      <Project>{25080671-1A80-4041-B9C7-260578FF4849}</Project>
+      <Name>ScriptCs</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Messages\Messages.csproj">
+      <Project>{1DC4BCD0-8E6B-4657-AD7C-2E1E01E3EB34}</Project>
+      <Name>Messages</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
+  </Target>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+  <ItemGroup>
+    <Folder Include="Helpers\" />
+  </ItemGroup>
+</Project>

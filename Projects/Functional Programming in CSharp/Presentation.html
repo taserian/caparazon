@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Title</title>
+    <meta charset="utf-8">
+    <style>
+        @import url(https://fonts.googleapis.com/css?family=Yanone+Kaffeesatz);
+        @import url(https://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic);
+        @import url(https://fonts.googleapis.com/css?family=Ubuntu+Mono:400,700,400italic);
+        body {
+            font-family: 'Droid Serif';
+        }
+        
+        h1,
+        h2,
+        h3 {
+            font-family: 'Yanone Kaffeesatz';
+            font-weight: normal;
+        }
+        
+        .remark-code,
+        .remark-inline-code {
+            font-family: 'Ubuntu Mono';
+        }
+    </style>
+</head>
+
+<body>
+    <textarea id="source">
+
+class: center, middle
+
+# Functional Programming in C#
+
+---
+
+# What we'll cover
+
+1. Functional Programming: What is it?
+2. Side effects
+3. Expressions over statements
+4. Functions as data
+5. Quick example (side effects, expressions)
+
+---
+
+# Functional Programming: What is it?
+
+A programming paradigm which concentrates on computing results rather than on performing actions.
+
+- Controlling side effects
+- Using expressions instead of statements
+- Treating functions as data 
+
+Functional programming resurgence ( inputs => output )
+
+Memoization.
+
+> Object-Oriented Programming makes code understandable by encapsulating moving parts.
+> Functional Programming makes code understandable by minimizing moving parts.
+> .right[Michael Feathers]
+
+???
+Reducing side effects 
+
+Optimization close to the machine in early years of computing, compared to functional programming.
+
+Now we're running into problems with programming in parallel to make use of multiple cores,
+ and the worries about optimization are not as prioritized.
+
+Functional programming makes extensive use of garbage collection, and memoization.
+
+---
+# Side effects
+
+Method calls that change shared state can cause unpredictability.
+
+Even if you want the side effects, it makes reasoning about that function more difficult. 
+
+Makes it harder to test a function.
+
+???
+GetOrderItems which removed items from inventory, causing a discount to be calculated incorrectly.
+
+It's no longer a matter of getting a result from a function call, but also reasoning about how
+it affects the system state.
+
+Testing now requires you to consider the state outside the function and not only the function's
+input parameters.
+
+---
+# Side effects
+
+Pure functions only operate with the input provided.
+
+Impure functions involve dealing with some state from outside the function.
+- Database 
+- Input/Output
+
+C# is not functional, but can be used in a functional manner.
+
+Immutability
+- turns away from side effects
+- enforces the separation between data and behavior.
+
+---
+# Expressions over statements
+
+In functional languages, everything produces a result. (No void functions)
+
+Statements define actions, and are executed for their side effects.
+
+Expressions produce results, and are executed for their result.
+
+```cs
+        // Statement
+        string posOrNeg;
+
+        if (value > 0) 
+            posOrNeg = "positive";
+        else
+            posOrNeg = "negative";    
+
+        // Functional    
+        var posOrNeg =
+            (value > 0) 
+                ? "positive"
+                : "negative"
+```
+???
+Expression composition
+---
+# Expressions over statements
+
+Expression composition:
+
+```cs
+        // Statement
+        string posOrNeg;
+
+        if (value > 0) 
+            posOrNeg = "positive";
+        else
+            posOrNeg = "negative";   
+
+        var msg = $"{value} is {posOrNeg}"
+
+        // Functional    
+        var msg = $"{value} is {((value > 0) ? "positive" : "negative")}";
+```
+---
+# Functions as data
+
+Higher-order functions
+
+You're probably already using this as LINQ.
+
+Lambda functions!
+
+???
+Higher order functions are
+
+Functions which accept other functions as parameters.
+
+Functions which return other functions.
+
+---
+# Functions as data
+
+```cs
+    // Imperative    
+    var ix = 0
+    while (ix < myList.Count)
+    {
+        if (myList[ix] % 2 != 0)
+        {
+            myList.RemoveAt(ix);
+        }
+        else
+        {
+            ++ix;
+        }
+    }
+
+    myList.Sort();
+
+    // Functional
+    myList
+        .Where(x => x % 2 == 0)
+        .OrderBy(x => x);
+
+```
+???
+Something inside the loop must cause the loop condition to be false.
+
+Both the variable and the list change.
+
+Is that variable used somewhere else?
+
+Editing the list within the function could cause system-wide changes.
+
+Sort is a void method, so it's run for its side effects, not for its result.
+
+We don't care how the Where clause iterates over the list, as long as it guarantees to do so.
+
+Also, these LINQ methods do not change the original list.
+---
+
+# Quick example
+
+```cs
+    public class NumberRange
+    {
+        public int lowerBound { get; set; }
+        public int upperBound { get; set; }
+
+        public bool InRange(int check)
+        {
+            return (lowerbound <= check && upperBound >= check);
+        }
+    }
+
+    var testValues = new List<int>{ 3, 7, 15, 30}
+    
+    var range = new NumberRange { lowerBound = 0, upperBound = 20 }
+    
+    testValues.ForEach(d => Console.Log($"{d} - {(range.InRange(d)}")));
+
+*   range.lowerBound = 10;
+    
+    testValues.ForEach(d => Console.Log($"{d} - {(range.InRange(d)}")));
+```
+???
+Issues:
+
+No constructor. No way to enforce rules, like making sure that 
+upperBound is larger than lowerBound.
+
+Range has changed its value, which is a code smell in functional programming.
+
+You may behave and use it properly, but someone else may not.
+
+---
+# Quick example
+
+```cs
+    public class NumberRange
+    {
+        public int lowerBound { get; private set; }
+        public int upperBound { get; private set; }
+*        public DateRange(int lower, int upper) {
+*            if (upper < lower) throw new Exception("Bad doggy.")
+*            lowerBound = lower;
+*            upperBound = upper;
+*        }
+        public bool InRange(int check) {
+            return (lowerbound <= check && upperBound >= check);
+        }
+    }
+
+    var testValues = new List<int>{ 3, 7, 1, 10}
+    var range1 = new NumberRange(0, 20);
+    testValues.ForEach(d => Console.Log($"{d} - {(range1.InRange(d)}")));
+*   var range2 = new NumberRange(10, 20);
+*   testValues.ForEach(d => Console.Log($"{d} - {(range2.InRange(d)}")));
+```
+???
+Issues:
+
+Added a constructor, and removed the ability to use set on a new NumberRange.
+
+Now instead of modifying the range, we create a new one.
+
+Let's add a Slide capability.
+---
+# Quick example
+
+```cs
+    public class NumberRange
+    {
+        public int lowerBound { get; private set; }
+        public int upperBound { get; private set; }
+        public DateRange(int lower, int upper) {
+            if (upper < lower) throw new Exception("Bad doggy.")
+            lowerBound = lower;
+            upperBound = upper;
+        }
+        public bool InRange(int check) {
+            return (lowerbound <= check && upperBound >= check);
+        }
+*        public void Slide(int amount){
+*            lowerBound += amount;
+*            upperBound += amount;
+*        }
+    }
+
+    var testValues = new List<int>{ 3, 7, 1, 10}
+    var range1 = new NumberRange(0, 20);
+    testValues.ForEach(d => Console.Log($"{d} - {(range1.InRange(d)}")));
+    var range2 = new NumberRange(10, 20);
+    testValues.ForEach(d => Console.Log($"{d} - {(range2.InRange(d)}")));
+*   range1.Slide(5);
+*   testValues.ForEach(d => Console.Log($"{d} - {(range1.InRange(d)}")));
+```
+???
+Issues:
+
+If we add it like this, we're letting the class do something that we're not 
+allowed to do ourselves.
+---
+# Quick example
+
+```cs
+    public class NumberRange
+    {
+        public int lowerBound { get; }
+        public int upperBound { get; }
+        public DateRange(int lower, int upper) {
+            if (upper < lower) throw new Exception("Bad doggy.")
+            lowerBound = lower;
+            upperBound = upper;
+        }
+        public bool InRange(int check) {
+            return (lowerbound <= check && upperBound >= check);
+        }
+*        public NumberRange Slide(int amount){
+*            return new NumberRange(lowerBound + amount, upperBound + amount);
+*        }
+    }
+
+    var testValues = new List<int>{ 3, 7, 1, 10}
+    var range1 = new NumberRange(0, 20);
+    testValues.ForEach(d => Console.Log($"{d} - {(range1.InRange(d)}")));
+    var range2 = new NumberRange(10, 20);
+    testValues.ForEach(d => Console.Log($"{d} - {(range2.InRange(d)}")));
+*   var range3 = range1.Slide(5);
+    testValues.ForEach(d => Console.Log($"{d} - {(range3.InRange(d)}")));
+```
+???
+Issues:
+
+C# won't tell you that an expression used as a astatement will just be discarded.
+
+    </textarea>
+    <script src="https://remarkjs.com/downloads/remark-latest.min.js">
+    </script>
+    <script>
+        var slideshow = remark.create({
+            ratio: '4:3',
+            highlightLines: true
+        });
+    </script>
+</body>
+
+</html>
